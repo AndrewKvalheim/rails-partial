@@ -8,15 +8,29 @@ import sublime, sublime_plugin
 def is_rails_view(path):
 	return True if ( re.search(r"(?:\\|\/)app(?:\\|\/)views", path) ) else False
 
+
+class PromptRailsPartialCommand(sublime_plugin.WindowCommand):
+	open_partial = False
+
+	def run(self, open_partial = False):
+		self.open_partial = open_partial
+
+		self.window.show_input_panel("Partial Name (underscore and extension not needed):","",self.on_done,None,None)
+		pass
+
+	def on_done(self, partial_name):
+		if self.window.active_view():
+			self.window.active_view().run_command('rails_partial', {'partial_name' : partial_name, 'open_partial' : self.open_partial})
+
 class RailsPartialCommand(sublime_plugin.TextCommand):
 	edit         = None
 	open_partial = False
 
-	def run(self, edit, open_partial = False):
+	def run(self, edit, partial_name, open_partial = False):
 		self.edit         = edit
 		self.open_partial = open_partial
 
-		self.view.window().show_input_panel("Partial Name (underscore and extension not needed):","",self.get_selected_text,None,None)
+		self.get_selected_text(partial_name)
 
 
 	# Get the selected text
