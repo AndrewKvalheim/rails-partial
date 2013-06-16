@@ -76,7 +76,7 @@ class RailsPartialCommand(sublime_plugin.TextCommand):
 		# Create the file and paste the data
 		if not os.path.exists(partial_file_with_path):
 			with open(partial_file_with_path, 'w') as f:
-				f.write(textwrap.dedent(partial_code.encode('utf-8')))
+				f.write(textwrap.dedent(partial_code))
 
 			#Open the file?
 			if (self.open_partial == True):
